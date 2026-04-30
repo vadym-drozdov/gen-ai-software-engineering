@@ -1,0 +1,178 @@
+### Banking Transactions API — Sample Requests
+### Compatible with VS Code REST Client extension and IntelliJ HTTP Client
+### Base URL: http://localhost:8080
+
+@baseUrl = http://localhost:8080
+@accA = ACC-12345
+@accB = ACC-67890
+
+###############################################################
+### POST /transactions — Create a deposit
+###############################################################
+
+POST {{baseUrl}}/transactions
+Content-Type: application/json
+
+{
+  "type": "deposit",
+  "toAccount": "{{accA}}",
+  "amount": 1000.00,
+  "currency": "USD"
+}
+
+###############################################################
+### POST /transactions — Create a deposit in EUR
+###############################################################
+
+POST {{baseUrl}}/transactions
+Content-Type: application/json
+
+{
+  "type": "deposit",
+  "toAccount": "{{accA}}",
+  "amount": 500.50,
+  "currency": "EUR"
+}
+
+###############################################################
+### POST /transactions — Create a withdrawal
+###############################################################
+
+POST {{baseUrl}}/transactions
+Content-Type: application/json
+
+{
+  "type": "withdrawal",
+  "fromAccount": "{{accA}}",
+  "amount": 200.00,
+  "currency": "USD"
+}
+
+###############################################################
+### POST /transactions — Create a transfer
+###############################################################
+
+POST {{baseUrl}}/transactions
+Content-Type: application/json
+
+{
+  "type": "transfer",
+  "fromAccount": "{{accA}}",
+  "toAccount": "{{accB}}",
+  "amount": 300.00,
+  "currency": "USD"
+}
+
+###############################################################
+### POST /transactions — Validation error (negative amount)
+###############################################################
+
+POST {{baseUrl}}/transactions
+Content-Type: application/json
+
+{
+  "type": "deposit",
+  "toAccount": "{{accA}}",
+  "amount": -50.00,
+  "currency": "USD"
+}
+
+###############################################################
+### POST /transactions — Validation error (bad account format)
+###############################################################
+
+POST {{baseUrl}}/transactions
+Content-Type: application/json
+
+{
+  "type": "deposit",
+  "toAccount": "INVALID-ACCOUNT",
+  "amount": 100.00,
+  "currency": "USD"
+}
+
+###############################################################
+### POST /transactions — Validation error (unsupported currency)
+###############################################################
+
+POST {{baseUrl}}/transactions
+Content-Type: application/json
+
+{
+  "type": "deposit",
+  "toAccount": "{{accA}}",
+  "amount": 100.00,
+  "currency": "XYZ"
+}
+
+###############################################################
+### GET /transactions — List all transactions
+###############################################################
+
+GET {{baseUrl}}/transactions
+
+###############################################################
+### GET /transactions — Filter by accountId
+###############################################################
+
+GET {{baseUrl}}/transactions?accountId={{accA}}
+
+###############################################################
+### GET /transactions — Filter by type
+###############################################################
+
+GET {{baseUrl}}/transactions?type=deposit
+
+###############################################################
+### GET /transactions — Filter by date range
+###############################################################
+
+GET {{baseUrl}}/transactions?from=2024-01-01&to=2024-12-31
+
+###############################################################
+### GET /transactions — Combined filters
+###############################################################
+
+GET {{baseUrl}}/transactions?accountId={{accA}}&type=transfer&from=2024-01-01&to=2026-12-31
+
+###############################################################
+### GET /transactions/{id} — Get by ID (replace with actual ID)
+###############################################################
+
+GET {{baseUrl}}/transactions/replace-with-actual-uuid
+
+###############################################################
+### GET /transactions/{id} — Not found example
+###############################################################
+
+GET {{baseUrl}}/transactions/nonexistent-id-abc
+
+###############################################################
+### GET /accounts/{accountId}/balance
+###############################################################
+
+GET {{baseUrl}}/accounts/{{accA}}/balance
+
+###############################################################
+### GET /accounts/{accountId}/summary (Option A)
+###############################################################
+
+GET {{baseUrl}}/accounts/{{accA}}/summary
+
+###############################################################
+### GET /accounts/{accountId}/interest (Option B)
+###############################################################
+
+GET {{baseUrl}}/accounts/{{accA}}/interest?rate=0.05&days=30
+
+###############################################################
+### GET /transactions/export?format=csv (Option C)
+###############################################################
+
+GET {{baseUrl}}/transactions/export?format=csv
+
+###############################################################
+### GET /transactions/export — Unsupported format (400)
+###############################################################
+
+GET {{baseUrl}}/transactions/export?format=xml
